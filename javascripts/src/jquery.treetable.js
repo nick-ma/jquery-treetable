@@ -74,7 +74,7 @@
         // TODO destroy: remove event handlers, expander, indenter, etc.
 
         Node.prototype.expand = function () {
-            console.time('node.expand');
+            //console.time('node.expand');
             if (this.children.length) {
                 if (this.expanded()) {
                     return this;
@@ -85,20 +85,20 @@
                 if (this.initialized && this.settings.onNodeExpand != null) {
                     this.settings.onNodeExpand.apply(this);
                 }
-                console.time('node.expand._showChildren');
+                //console.time('node.expand._showChildren');
 
                 // if ($(this.row)
-                // .is(":visible")) { //very slow, fuck!
+                // .is(":visible")) {
                 this._showChildren();
 
                 // if (this.initialized && this.settings.onNodeExpanded != null) {
                 // this.settings.onNodeExpanded.apply(this);
                 // }
                 // }
-                console.log(console.timeEnd('node.expand._showChildren'));
+                //console.log(console.timeEnd('node.expand._showChildren'));
                 this.expander.attr("title", this.settings.stringCollapse);
             }
-            console.log(console.timeEnd('node.expand'));
+            //console.log(console.timeEnd('node.expand'));
             return this;
         };
 
@@ -132,11 +132,7 @@
         };
 
         Node.prototype.parentNode = function () {
-            if (this.parentId != null) {
-                return this.tree[this.parentId];
-            } else {
-                return null;
-            }
+            return this.tree[this.parentId] || null;
         };
 
         Node.prototype.removeChild = function (child) {
@@ -165,12 +161,12 @@
 
                 target.off("click.treetable")
                     .on("click.treetable", handler);
-                target.off("keydown.treetable")
-                    .on("keydown.treetable", function (e) {
-                        if (e.keyCode == 13) {
-                            handler.apply(this, [e]);
-                        }
-                    });
+                // target.off("keydown.treetable")
+                //     .on("keydown.treetable", function(e) {
+                //         if (e.keyCode == 13) {
+                //             handler.apply(this, [e]);
+                //         }
+                //     });
             }
 
             this.indenter[0].style.paddingLeft = "" + (this.level() * settings.indent) + "px";
@@ -197,19 +193,19 @@
 
         Node.prototype.show = function () {
 
-            console.time('node.show.node-initialize');
+            //console.time('node.show.node-initialize');
             if (!this.initialized) {
                 this._initialize();
             }
-            console.log(console.timeEnd('node.show.node-initialize'));
-            console.time('node.show.row-show');
+            // console.log(console.timeEnd('node.show.node-initialize'));
+            // console.time('node.show.row-show');
             this.row.show();
-            console.log(console.timeEnd('node.show.row-show'));
-            console.time('node.show.show-c');
+            // console.log(console.timeEnd('node.show.row-show'));
+            // console.time('node.show.show-c');
             if (this.children.length && this.expanded()) {
                 this._showChildren();
             }
-            console.log(console.timeEnd('node.show.show-c'));
+            // console.log(console.timeEnd('node.show.show-c'));
             return this;
         };
 
@@ -240,11 +236,12 @@
 
             if (settings.expandable === true && settings.initialState === "collapsed") {
                 this.collapse();
-            } else {
-                if (this.children.length) {
-                    this.expand();
-                }
             }
+            //  else {
+            //     if (this.children.length) {
+            //         this.expand();
+            //     }
+            // }
 
             if (settings.onNodeInitialized != null) {
                 settings.onNodeInitialized.apply(this);
@@ -262,13 +259,13 @@
             // _results.push(child.show());
             // }
             // return _results;
-            console.time('inside show children')
+            // console.time('inside show children')
             if (this.children.length) {
                 for (i = 0; i < this.children.length; i++) {
                     this.children[i].show();
                 }
             }
-            console.log(console.timeEnd('inside show children'))
+            // console.log(console.timeEnd('inside show children'))
         };
 
         return Node;
@@ -286,27 +283,35 @@
         }
 
         Tree.prototype.collapseAll = function () {
-            var node, _i, _len, _ref, _results;
-            _ref = this.nodes;
-            _results = [];
-            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-                node = _ref[_i];
-                _results.push(node.collapse());
-            }
-            return _results;
+            // var node, _i, _len, _ref, _results;
+            // _ref = this.nodes;
+            // _results = [];
+            // for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            //     node = _ref[_i];
+            //     _results.push(node.collapse());
+            // }
+            // return _results;
+            for (var i = 0; i < this.nodes.length; i++) {
+                this.nodes[i].collapse();
+            };
         };
 
         Tree.prototype.expandAll = function () {
-            var node, _i, _len, _ref, _results;
-            _ref = this.nodes;
-            _results = [];
-            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-                node = _ref[_i];
-                if (node.children.length) {
-                    _results.push(node.expand());
-                }
-            }
-            return _results;
+            // var node, _i, _len, _ref, _results;
+            // _ref = this.nodes;
+            // _results = [];
+            // for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            //     node = _ref[_i];
+            //     if (node.children.length) {
+            //         _results.push(node.expand());
+            //     }
+            // }
+            // return _results;
+            for (var i = 0; i < this.nodes.length; i++) {
+                //if(this.nodes[i].chindren && this.nodes[i].chindren.length){
+                this.nodes[i].expand();
+                //}
+            };
         };
 
         Tree.prototype.findLastNode = function (node) {
@@ -319,7 +324,7 @@
 
         Tree.prototype.loadRows = function (rows) {
             var node, row, i;
-            console.time('tree.loadRows');
+            // console.time('tree.loadRows');
             if (rows != null) {
                 for (i = 0; i < rows.length; i++) {
                     row = $(rows[i]);
@@ -341,7 +346,7 @@
             for (i = 0; i < this.nodes.length; i++) {
                 node = this.nodes[i].updateBranchLeafClass();
             }
-            console.log(console.timeEnd('tree.loadRows'));
+            // console.log(console.timeEnd('tree.loadRows'));
 
             return this;
         };
@@ -486,7 +491,7 @@
                     tree = new Tree(this, settings);
                     tree.loadRows(this.rows)
                         .render();
-                    console.log(this.rows);
+                    // console.log(this.rows);
 
                     el.addClass("treetable")
                         .data("treetable", tree);

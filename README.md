@@ -18,3 +18,7 @@ of this document is also available online at
 http://ludo.cubicphuse.nl/jquery-treetable. An AJAX enabled example built with
 Ruby on Rails can be found at
 https://github.com/ludo/jquery-treetable-ajax-example.
+
+## 我更新的内容
+
+极大的提升了渲染的速度，再多个地方调整了if判断的语句。
